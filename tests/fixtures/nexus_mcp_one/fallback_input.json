@@ -1,0 +1,8 @@
+{
+  "user_input": "I need help with something unusual that doesn't map well",
+  "client_context": {
+    "source": "nexus",
+    "channel": "widget"
+  },
+  "request_id": "nexus-fixture-004"
+}

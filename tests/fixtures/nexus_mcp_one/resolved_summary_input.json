@@ -1,0 +1,10 @@
+{
+  "user_input": "Help me validate a CURP in Mexico",
+  "client_context": {
+    "source": "nexus",
+    "channel": "widget",
+    "tenant": "evilink-dev",
+    "session_id": "sess-fixture-001"
+  },
+  "request_id": "nexus-fixture-001"
+}

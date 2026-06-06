@@ -1,0 +1,8 @@
+{
+  "user_input": "I need fraud risk scoring for a transaction",
+  "client_context": {
+    "source": "nexus",
+    "channel": "widget"
+  },
+  "request_id": "nexus-fixture-002"
+}

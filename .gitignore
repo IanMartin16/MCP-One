@@ -1,0 +1,33 @@
+# env
+.env
+.env.*
+.venv/
+venv/
+
+# python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# build / dist
+build/
+dist/
+*.egg-info/
+
+# editors
+.idea/
+.vscode/
+
+# os
+.DS_Store
+Thumbs.db
+
+# docs
+mcp-one-evolution-phase-2-v0.1.md
+MCP-One-local-validation-milestone-v0.1.md
+nexus-first-live-integration-strategy-v0.1.md
+nexus-first-live-flow-v0.1.md
+nexus-mcp-one-live-integration-strategy-v0.1.md
+product-registry-v0.1.md

@@ -1,0 +1,8 @@
+{
+  "user_input": "Can you analyze this image workflow for me?",
+  "client_context": {
+    "source": "nexus",
+    "channel": "widget"
+  },
+  "request_id": "nexus-fixture-003"
+}

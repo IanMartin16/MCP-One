@@ -11,6 +11,7 @@ from app.api.routes.meta import router as meta_router
 from app.api.routes.orchestrate import router as orchestrate_router
 from app.api.routes.providers import router as providers_router
 from app.api.routes.registry import router as registry_router
+from app.api.routes.health import router as health_router
 from app.config.settings import get_settings
 from app.utils.error_codes import ErrorCodes
 

@@ -35,6 +35,9 @@ class CapabilityDef(BaseModel):
     intent_families: list[str] = Field(default_factory=list)
     output_modes: list[str] = Field(default_factory=list)
     restrictions: list[str] = Field(default_factory=list)
+    execution_endpoint: str | None = None   # método de CryptoLinkClient, p.ej. "get_momentum"
+    output_kind: str | None = None          # kind neutral emitido, p.ej. "momentum"
+    disambiguation_hints: list[str] | None = None  # pistas para el enganche cuando
 
 
 class IntentRule(BaseModel):

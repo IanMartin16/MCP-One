@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional, Any
 from pydantic import BaseModel, Field
+from app.execution.executor import ToolResult
 
 ResponseMode = Literal[
     "module_recommendation",
@@ -46,3 +47,4 @@ class OrchestrationOutput(BaseModel):
     user_facing_context: str | None = None
     next_step_hint: str | None = None
     offer_help: str | None = None
+    tool_result: ToolResult | None = None

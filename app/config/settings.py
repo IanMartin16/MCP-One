@@ -11,6 +11,7 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
+        ser_json_exclude_none=True,
     )
 
     app_name: str = "MCP-One"
@@ -22,7 +23,7 @@ class Settings(BaseSettings):
     provider_timeout_seconds: float = 10.0
 
     openai_model: str = "gpt-4.1-mini"
-    anthropic_model: str = "claude-3-5-sonnet"
+    anthropic_model: str = "claude-haiku-4-5"
 
     enable_composition: bool = True
     enable_preview_for_planned: bool = True
@@ -42,6 +43,11 @@ class Settings(BaseSettings):
 
     registry_source: str = "local"
     log_level: str = "INFO"
+
+    cryptolink_base_url: str = "https://cryptolink.mx"
+    cryptolink_app_url: str = "https://cryptolink-production.up.railway.app"
+    cryptolink_api_key: str | None = Field(default=None)
+    cryptolink_timeout_seconds: float = 6.0
 
     openai_api_key: str | None = Field(default=None)
     anthropic_api_key: str | None = Field(default=None)

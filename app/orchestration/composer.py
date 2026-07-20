@@ -3,7 +3,6 @@ from __future__ import annotations
 from app.models.outputs import NextStep, OrchestrationOutput
 from app.models.plan import OrchestrationPlan
 from app.models.resolution import ResolutionResult
-from app.orchestration.enrichment import enrich_summary
 from app.registry.access import get_capability, get_module
 from app.orchestration.planner import build_plan
 from app.orchestration.user_facing_mapper import build_user_facing_payload
@@ -125,7 +124,6 @@ def _build_next_step(resolution: ResolutionResult) -> NextStep | None:
 def compose_output(resolution: ResolutionResult) -> OrchestrationOutput:
     effective_plan = resolution.plan or build_plan(resolution)
     raw_summary = _build_summary_from_plan(effective_plan)
-    final_summary = enrich_summary(raw_summary, resolution)
 
     user_facing = build_user_facing_payload(resolution)
 
@@ -135,7 +133,7 @@ def compose_output(resolution: ResolutionResult) -> OrchestrationOutput:
         mode=resolution.mode,
         modules_used=resolution.selected_modules,
         capabilities_used=resolution.selected_capabilities,
-        summary=final_summary,
+        summary=raw_summary,
         insight=_build_insight_from_plan(effective_plan, resolution),
         recommended_module=resolution.recommended_module,
         next_step=_build_next_step(resolution),

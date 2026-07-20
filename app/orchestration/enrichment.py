@@ -1,3 +1,19 @@
+"""
+enrichment.py — enriquecimiento del summary de RECOMENDACIÓN.  (MCPOne)
+                (app/orchestration/enrichment.py)
+
+Cambios:
+  - `enrich_summary` ahora es `async` (el provider client.generate es async).
+  - Ya NO se llama desde compose_output (síncrono). Se llama desde el endpoint
+    orchestrate (async), y SÓLO cuando no hubo ejecución (recomendación pura) —
+    porque en ejecución el widget usa el tool_result, no el summary.
+
+Esto separa las dos narrativas por carril:
+  - recomendación -> enrich_summary (este archivo, inglés, sobre la decisión)
+  - ejecución     -> generate_narrative (narrative.py, español, sobre los datos)
+Cada una en su caso, sin redundancia ni doble llamada al LLM.
+"""
+
 from __future__ import annotations
 
 from app.config.settings import get_settings
@@ -7,7 +23,7 @@ from app.models.resolution import ResolutionResult
 from app.providers.factory import get_provider_client
 
 
-def enrich_summary(summary: str, resolution: ResolutionResult) -> str:
+async def enrich_summary(summary: str, resolution: ResolutionResult) -> str:
     settings = get_settings()
 
     if not settings.enable_provider_enrichment:
@@ -40,7 +56,7 @@ def enrich_summary(summary: str, resolution: ResolutionResult) -> str:
         },
     )
 
-    response = client.generate(request)
+    response = await client.generate(request)   # <- await (antes era síncrono)
     record_provider_metrics(response)
 
     if not response.success or not response.content:

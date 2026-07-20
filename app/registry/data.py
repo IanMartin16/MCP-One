@@ -4,6 +4,9 @@ from app.models.registry import (
     CapabilityDef,
     IntentRule,
 )
+from app.registry.cryptolink_execution_capabilities import (
+        CRYPTOLINK_EXECUTION_CAPABILITIES,
+    )
 
 REGISTRY = RegistryDef(
     modules=[
@@ -19,9 +22,10 @@ REGISTRY = RegistryDef(
                 "crypto.multi_asset_snapshot",
                 "crypto.market_trend_summary",
                 "crypto.market_regime_summary",
+                *[cap.capability_id for cap in CRYPTOLINK_EXECUTION_CAPABILITIES],
             ],
             input_modes=["text", "symbol_list"],
-            output_modes=["summary", "composed_summary", "preview"],
+            output_modes=["summary", "composed_summary", "preview", "tool_execution"],
             supports_handoff=True,
         ),
         ModuleDef(
@@ -85,7 +89,7 @@ REGISTRY = RegistryDef(
             output_modes=["summary", "preview"],
             supports_handoff=True,
         ),
-         ModuleDef(
+        ModuleDef(
             module_id="curpify",
             name="Curpify",
             description="Validation-oriented module for CURP and RFC workflows in Mexico.",
@@ -372,53 +376,167 @@ REGISTRY = RegistryDef(
             intent_families=["ecosystem_health", "observability"],
             output_modes=["summary", "module_recommendation"],
         ),
+        *CRYPTOLINK_EXECUTION_CAPABILITIES, 
     ],
+
     intent_rules=[
         IntentRule(
             rule_id="rule_asset_lookup_crypto",
             intent_family="asset_lookup",
-            description="Routes asset and quote style requests to CryptoLink.",
+            description="Routes asset and quote requests to CryptoLink price execution.",
             priority="high",
             patterns=[
-                "price",
-                "quote",
-                "market price",
-                "btc price",
-                "eth price",
-                "price of",
-                "precio",
-                "cotiza",
-                "valor",
-                "cuanto vale",
-                "cuánto vale",
+                "price", "prices", "precios", "price lookup", "precio de", "precios de","cuanto valen",
+                "cuánto valen", "cotizacion","cotización","cotizaciones", "quote", "market price", "btc price", "eth price", "price of",
+                "precio", "cotiza", "valor", "cuanto vale", "cuánto vale",
             ],
             preferred_modules=["cryptolink"],
-            preferred_capabilities=["crypto.price_lookup"],
+            preferred_capabilities=["crypto.exec.prices"],   # antes: crypto.price_lookup
             allow_composition=False,
         ),
+
+        # --- Snapshot / resumen general (antes -> multi_asset_snapshot + trend_summary) ---
         IntentRule(
             rule_id="rule_market_summary_crypto",
-            intent_family="market_summary",
-            description="Routes general market summary requests to CryptoLink snapshots or trends.",
+            intent_family="market_snapshot_exec",
+            description="Routes general market snapshot/overview to CryptoLink snapshot execution.",
             priority="high",
             patterns=[
-                "market snapshot",
-                "market summary",
-                "market overview",
-                "snapshot",
-                "overview",
-                "how is the market",
-                "crypto market",
-                "resumen del mercado",
-                "estado del mercado",
+                "market snapshot", "market summary", "market overview", "snapshot",
+                "overview", "how is the market", "crypto market",
+                "resumen del mercado", "estado del mercado", "panorama del mercado",
             ],
             preferred_modules=["cryptolink"],
-            preferred_capabilities=[
-                "crypto.multi_asset_snapshot",
-                "crypto.market_trend_summary",
-            ],
-            allow_composition=True,
+            preferred_capabilities=["crypto.exec.snapshot"],   # antes: recomendación
+            allow_composition=False,
         ),
+
+        # --- Trends (tendencia) ---
+        IntentRule(
+            rule_id="rule_market_trends_crypto",
+            intent_family="market_trends_exec",
+            description="Routes market trend requests to CryptoLink trends execution.",
+            priority="high",
+            patterns=[
+                "market trends", "market trend", "trend", "trends",
+                "tendencia del mercado", "tendencia de mercado", "tendencias",
+                "tendencia reciente",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.trends"],
+            allow_composition=False,
+        ),
+
+        # --- Momentum ---
+        IntentRule(
+            rule_id="rule_market_momentum_crypto",
+            intent_family="market_momentum_exec",
+            description="Routes momentum requests to CryptoLink momentum execution.",
+            priority="high",
+            patterns=[
+                "momentum", "market momentum", "fuerza del mercado", "traccion",
+                "tracción", "strength",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.momentum"],
+            allow_composition=False,
+        ),
+
+        # --- Regime (régimen) ---
+        IntentRule(
+            rule_id="rule_market_regime_crypto",
+            intent_family="market_regime_exec",
+            description="Routes market regime requests to CryptoLink regime execution.",
+            priority="high",
+            patterns=[
+                "market regime", "régimen del mercado", "regimen del mercado",
+                "régimen de mercado", "regimen de mercado", "sesgo del mercado",
+                "market bias",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.regime"],
+            allow_composition=False,
+        ),
+
+        # --- Market health ---
+        IntentRule(
+            rule_id="rule_market_health_crypto",
+            intent_family="market_health_exec",
+            description="Routes market health requests to CryptoLink health execution.",
+            priority="high",
+            patterns=[
+                "market health", "salud del mercado", "salud de mercado",
+                "market condition", "condicion del mercado", "condición del mercado",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.market_health"],
+            allow_composition=False,
+        ),
+
+        # --- Anomalies ---
+        IntentRule(
+            rule_id="rule_market_anomalies_crypto",
+            intent_family="market_anomalies_exec",
+            description="Routes anomaly detection to CryptoLink anomalies execution.",
+            priority="high",
+            patterns=[
+                "market anomalies", "anomalias del mercado", "anomalías del mercado",
+                "movimiento inusual", "movimientos inusuales", "actividad inusual",
+                "outliers", "detectar anomalias", "detectar anomalías",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.anomalies"],
+            allow_composition=False,
+        ),
+
+         # --- Risk flags de MERCADO (gana a secure_link por especificidad) ---
+        IntentRule(
+            rule_id="rule_market_risk_flags_crypto",
+            intent_family="market_risk_flags_exec",
+            description="Routes MARKET risk flags to CryptoLink (distinct from fraud/security -> secure_link).",
+            priority="critical",
+            patterns=[
+                "risk flags", "risk signals", "market risk",
+                "riesgo de mercado", "riesgo del mercado", "riesgos de mercado",
+                "banderas de riesgo", "señales de riesgo", "alertas de mercado",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.risk_flags"],
+            allow_composition=False,
+        ),
+
+        # --- Social pulse / narrativa ---
+        IntentRule(
+            rule_id="rule_market_social_pulse_crypto",
+            intent_family="market_narrative_exec",
+            description="Routes social pulse / market narrative to CryptoLink execution.",
+            priority="high",
+            patterns=[
+                "social pulse", "market narrative", "pulso social",
+                "narrativa del mercado", "narrativa de mercado",
+                "sentimiento del mercado", "social sentiment",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.social_pulse"],
+            allow_composition=False,
+        ),
+
+        # --- Movers ---
+        IntentRule(
+            rule_id="rule_market_movers_crypto",
+            intent_family="market_movers_exec",
+            description="Routes top movers to CryptoLink movers execution.",
+            priority="high",
+            patterns=[
+                "top movers", "market movers", "biggest movers",
+                "mayores subidas", "mayores caidas", "mayores caídas",
+                "gainers", "losers",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.movers"],
+            allow_composition=False,
+        ),
+
         IntentRule(
             rule_id="rule_ecosystem_what_is_evilink",
             intent_family="ecosystem_overview",
@@ -510,6 +628,8 @@ REGISTRY = RegistryDef(
                 "digito verificador",
                 "dígito verificador",
                 "check digit",
+                "que es curpify",
+                "what is curpify",
             ],
             preferred_modules=["curpify"],
             preferred_capabilities=[

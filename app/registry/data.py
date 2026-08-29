@@ -413,6 +413,44 @@ REGISTRY = RegistryDef(
 
         # --- Trends (tendencia) ---
         IntentRule(
+            rule_id="rule_what_is_social_link",
+            intent_family="social_link_overview",
+            description="Explains what Social Link is (recommendation, not crypto execution).",
+            priority="high",
+            patterns=[
+                "social link",
+                "social_link",
+                "que es social link",
+                "qué es social link",
+                "what is social link",
+                "señales sociales",
+                "senales sociales",
+                "basic signals",
+                "basic-signals",
+            ],
+            preferred_modules=["social_link"],
+            preferred_capabilities=["social.topic_attention"],
+            allow_composition=False,
+        ),
+        IntentRule(
+            rule_id="rule_what_is_cryptolink",
+            intent_family="cryptolink_overview",
+            description="Explains what CryptoLink is (the data API vs the web portal). Recommendation only — price/momentum/etc. queries still go to execution rules.",
+            priority="high",
+            patterns=[
+                "que es cryptolink",
+                "qué es cryptolink",
+                "what is cryptolink",
+                "que es crypto link",
+                "qué es crypto link",
+                "explica cryptolink",
+                "explain cryptolink",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.price_lookup"],  # capability de RECOMENDACIÓN, no exec
+            allow_composition=False,
+        ),
+        IntentRule(
             rule_id="rule_market_trends_crypto",
             intent_family="market_trends_exec",
             description="Routes market trend requests to CryptoLink trends execution.",

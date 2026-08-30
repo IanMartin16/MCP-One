@@ -44,8 +44,8 @@ USER_FACING_PRODUCT_COPY = {
     },
     "social_link": {
         "title": "Social Link",
-        "summary": "Es una API puente que entrega señales de mercado crypto (trends y basic-signals) derivadas de datos del proveedor.",
-        "context": "Pensada como complemento del portal CryptoLink web, para seguir tendencias y atención del mercado. Está evolucionando hacia análisis más profundo.",
+        "summary": "Es la capa de señales de mercado crypto: convierte datos en tendencias y trends listos para usar (trends y basic-signals) derivadas de datos del proveedor.",
+        "context": "Complementa a CryptoLink aportando la lectura de tendencias y atención del mercado, y está evolucionando hacia análisis más profundo.",
         "next_step": "Si quieres, te explico qué señales de mercado ofrece hoy y hacia dónde va.",
         "offer_help": "Puedo ayudarte a entender qué trends y señales puedes obtener de ahí.",
     },

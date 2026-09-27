@@ -32,7 +32,16 @@ from app.execution.normalizers import normalize_data
 
 # Conocimiento de dominio de Cryptolink (portado del extractSymbols de Nexus).
 # Vive en el ejecutor, NO en el router: el router enruta, esto es de crypto.
-KNOWN_SYMBOLS = {"BTC", "ETH", "SOL", "XRP", "ADA", "DOGE", "AVAX", "DOT", "LINK", "BNB"}
+KNOWN_SYMBOLS = {"BTC", "ETH", "USDT", "BNB", "XRP", "USDC", "SOL", "TRX", "ZEC", "FIGR_HELOC", 
+                "HYPE", "DOGE", "LINK", "XMR", "WBT", "USDS", "ADA", "RAIN", "LEO", "XLM",
+                "BCH", "NEAR", "AWETH", "UNI", "LTC", "CC", "USDE", "AVAX", "SUI", "DAI",
+                "GRAM", "USD1", "HBAR", "TAO", "SHIB", "CRO", "USDG", "M", "PYUSD", "BTW",
+                "ENA", "XAUT", "ONDE", "OKB", "RLUSD", "USYC", "AAVE", "BUIDL", "USDY",
+                "MNT", "DOT", "PUMP", "ASTER", "WLD", "MORPHO", "PAXG", "WLFI", "SKY", "PEPE",
+                "ICP", "USDD", "ARB", "HTX", "ETC", "EURSAFO", "U", "VVV", "BGB", "USDGO",
+                "USDF", "BFUSD", "KAS", "POL", "GT", "LIT", "JUP", "ALGO", "RENDER", "PI",
+                "KCS", "JST", "ATOM", "BCAP", "FIL", "DASH", "CAKE", "AERO", "NEXO", "VET",
+                "INJ", "AKE", "USTB", "EUTBL", "APT", "STABLE", "GHO", "ETHFI", "PYTH", "STX",}
 DEFAULT_SYMBOLS = ["BTC", "ETH", "SOL", "ZEC", "USDT"]
 
 # Endpoints que no requieren símbolos.

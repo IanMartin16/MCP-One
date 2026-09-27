@@ -33,7 +33,7 @@ from app.execution.normalizers import normalize_data
 # Conocimiento de dominio de Cryptolink (portado del extractSymbols de Nexus).
 # Vive en el ejecutor, NO en el router: el router enruta, esto es de crypto.
 KNOWN_SYMBOLS = {"BTC", "ETH", "SOL", "XRP", "ADA", "DOGE", "AVAX", "DOT", "LINK", "BNB"}
-DEFAULT_SYMBOLS = ["BTC", "ETH", "SOL"]
+DEFAULT_SYMBOLS = ["BTC", "ETH", "SOL", "ZEC", "USDT"]
 
 # Endpoints que no requieren símbolos.
 NO_SYMBOL_ENDPOINTS = {"get_snapshot"}
@@ -130,7 +130,7 @@ class CryptoLinkExecutor:
         source = resp.get("source")
         as_of = resp.get("ts") or resp.get("asOf")
         fiat = resp.get("fiat") or req.fiat
-        normalized = normalize_data(resp)
+        normalized = normalize_data(resp, kind=kind)
 
         # toolResult NEUTRAL: data uniforme (a diferencia del Nexus viejo, que
         # subía el crudo a sections). nexus-slim lo baja a kpi_grid/chart/text.

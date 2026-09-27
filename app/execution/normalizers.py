@@ -1,8 +1,6 @@
 """
 normalizers.py — normalización ESTRUCTURAL del data crudo.  (vive en MCPOne)
 
-Ruta sugerida: app/execution/normalizers.py
-
 Convierte el `data` crudo de CryptoLink a una forma uniforme para que nexus-slim
 lo reciba predecible. Este archivo ES el contrato neutral (lado MCPOne): define
 qué forma tiene cada kind al cruzar hacia nexus-slim. El contract.py de nexus-slim
@@ -90,3 +88,28 @@ def _reshape(payload: Any, out: dict[str, Any]) -> dict[str, Any]:
     else:
         out["value"] = payload
     return out
+
+def normalize_data(resp: dict, kind: str | None = None) -> dict:
+    # Kinds con contrato propio -> normalización específica.
+    if kind == "prices":
+        return _normalize_prices(resp)
+    # ... resto de la lógica estructural genérica existente, SIN CAMBIOS ...
+    return _normalize_structural(resp)   # lo que ya hacía
+
+
+def _normalize_prices(resp: dict) -> dict:
+   
+    prices = resp.get("prices") or {}
+    change24h = resp.get("change24h") or {}
+    market_cap = resp.get("marketCap") or {}
+
+    rows = []
+    for symbol, price in prices.items():
+        row = {"symbol": symbol, "price": price}
+        if symbol in change24h and change24h[symbol] is not None:
+            row["change24h"] = change24h[symbol]
+        if symbol in market_cap and market_cap[symbol] is not None:
+            row["marketCap"] = market_cap[symbol]
+        rows.append(row)
+
+    return {"rows": rows}

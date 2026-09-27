@@ -36,7 +36,9 @@ from typing import Any
 ENVELOPE_KEYS = {"ok", "fiat", "ts", "source", "provider", "summary"}
 
 
-def normalize_data(raw: dict[str, Any]) -> dict[str, Any]:
+def normalize_data(raw: dict, kind: str | None = None) -> dict:
+    if kind == "prices":
+        return _normalize_prices(raw)
     """Reubica la carga cruda a forma uniforme. No inspecciona contenido."""
     if not isinstance(raw, dict):
         return {"rows": []}
@@ -89,16 +91,7 @@ def _reshape(payload: Any, out: dict[str, Any]) -> dict[str, Any]:
         out["value"] = payload
     return out
 
-def normalize_data(resp: dict, kind: str | None = None) -> dict:
-    # Kinds con contrato propio -> normalización específica.
-    if kind == "prices":
-        return _normalize_prices(resp)
-    # ... resto de la lógica estructural genérica existente, SIN CAMBIOS ...
-    return _normalize_structural(resp)   # lo que ya hacía
-
-
 def _normalize_prices(resp: dict) -> dict:
-   
     prices = resp.get("prices") or {}
     change24h = resp.get("change24h") or {}
     market_cap = resp.get("marketCap") or {}

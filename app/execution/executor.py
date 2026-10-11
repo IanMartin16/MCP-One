@@ -36,7 +36,7 @@ KNOWN_SYMBOLS = {"BTC", "ETH", "USDT", "BNB", "XRP", "USDC", "SOL", "TRX", "ZEC"
                 "HYPE", "DOGE", "LINK", "XMR", "WBT", "USDS", "ADA", "RAIN", "LEO", "XLM",
                 "BCH", "NEAR", "AWETH", "UNI", "LTC", "CC", "USDE", "AVAX", "SUI", "DAI",
                 "GRAM", "USD1", "HBAR", "TAO", "SHIB", "CRO", "USDG", "M", "PYUSD", "BTW",
-                "ENA", "XAUT", "ONDE", "OKB", "RLUSD", "USYC", "AAVE", "BUIDL", "USDY",
+                "ENA", "XAUT", "ONDE", "OKB", "RLUSD", "USYC", "AAVE", "BUIDL", "USDY", "OUSD",
                 "MNT", "DOT", "PUMP", "ASTER", "WLD", "MORPHO", "PAXG", "WLFI", "SKY", "PEPE",
                 "ICP", "USDD", "ARB", "HTX", "ETC", "EURSAFO", "U", "VVV", "BGB", "USDGO",
                 "USDF", "BFUSD", "KAS", "POL", "GT", "LIT", "JUP", "ALGO", "RENDER", "PI",

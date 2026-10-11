@@ -1,33 +1,3 @@
-"""
-normalizers.py — normalización ESTRUCTURAL del data crudo.  (vive en MCPOne)
-
-Convierte el `data` crudo de CryptoLink a una forma uniforme para que nexus-slim
-lo reciba predecible. Este archivo ES el contrato neutral (lado MCPOne): define
-qué forma tiene cada kind al cruzar hacia nexus-slim. El contract.py de nexus-slim
-es la misma frontera vista desde el otro lado.
-
-PRINCIPIO CLAVE — no mira adentro del dato:
-No conoce los campos internos (que momentum trae `strength`, que regime trae
-`score`...). Solo reordena la FORMA. Por eso es robusto ante contratos crudos
-inconsistentes: nunca los inspecciona.
-
-Las respuestas crudas tienen la misma anatomía:
-  - campos de SOBRE conocidos: ok, fiat, ts, source, summary
-  - UNA llave de carga con el nombre del recurso (momentum, regime, flags...)
-    que NO siempre coincide con el kind (risk_flags -> llave "flags").
-
-Regla estructural:
-  1) quita el sobre.
-  2) lo que queda es la llave de carga (por descarte, sin asumir su nombre).
-  3) si su valor es lista  -> data["rows"] = lista
-     si es objeto          -> sube sus campos a data (plano)
-  4) preserva `summary` del sobre si venía (risk_flags/anomalies lo traen).
-
-Familias (solo para documentar; la regla es la misma para todas):
-  lista-por-símbolo: momentum, trends, movers, risk_flags, anomalies -> rows
-  agregada:          regime, market_health, snapshot, social_pulse   -> plano
-"""
-
 from __future__ import annotations
 
 from typing import Any

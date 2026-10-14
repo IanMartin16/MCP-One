@@ -67,7 +67,7 @@ class ExecutionRequest(BaseModel):
     capability: CapabilityDef
     message: str | None = None          # para extraer símbolos
     symbols: list[str] | None = None    # si ya vienen resueltos, se respetan
-    fiat: str = "USD"                   # alineado a v4; ya no MXN
+    fiat: str = "USD"                   
 
 
 class ToolResult(BaseModel):

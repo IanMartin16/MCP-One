@@ -1,26 +1,3 @@
-"""
-cryptolink_execution_capabilities.py — capabilities de EJECUCIÓN de Cryptolink.
-                                        (módulo independiente, en MCPOne)
-
-Ruta sugerida: app/registry/cryptolink_execution_capabilities.py
-El provider lo importa:
-    from app.registry.cryptolink_execution_capabilities import (
-        CRYPTOLINK_EXECUTION_CAPABILITIES,
-    )
-
-Cada capability es autodescriptiva: output_modes=["tool_execution"],
-execution_endpoint (método del cliente) y output_kind (kind neutral).
-
-`disambiguation_hints`: pistas que usa el ENGANCHE cuando varias capabilities
-comparten intent_family, para elegir la correcta. NO es detección de intención
-(eso ya lo hizo el router); es refinamiento dentro de una intención ya resuelta.
-
-Familias con ambigüedad (por eso llevan hints):
-  - trend_analysis  -> momentum vs trends
-  - market_summary  -> varias caen aquí
-Si ninguna pista gana, el enganche cae a snapshot (lectura general honesta).
-"""
-
 from app.models.registry import CapabilityDef
 
 CRYPTOLINK_EXECUTION_CAPABILITIES = [
@@ -165,6 +142,7 @@ CRYPTOLINK_EXECUTION_CAPABILITIES = [
         output_modes=["tool_execution"],
         execution_endpoint="get_price_spark",
         output_kind="price_spark",
-        disambiguation_hints=["spark", "sparkline", "serie", "series"],
+        disambiguation_hints=[ "spark","sparkline","serie","series","grafica","gráfica de precio","chart","historico","histórico",
+                "movimiento reciente","evolucion","evolución",],
     ),
 ]

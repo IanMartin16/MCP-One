@@ -30,16 +30,34 @@ def compare_rules(
     candidate_match_count: int,
     current_rule: IntentRule | None,
     current_match_count: int,
+    candidate_matches: list[str] | None = None,
+    current_matches: list[str] | None = None,
 ) -> bool:
     if current_rule is None:
         return True
 
+    # 1. Primero: especificidad REAL del pattern que hizo match.
+    candidate_match_specificity = matched_specificity_score(
+        candidate_matches
+    )
+    current_match_specificity = matched_specificity_score(
+        current_matches
+    )
+
+    if candidate_match_specificity > current_match_specificity:
+        return True
+
+    if candidate_match_specificity < current_match_specificity:
+        return False
+
+    # 2. Si la especificidad empató, cantidad de matches.
     if candidate_match_count > current_match_count:
         return True
 
     if candidate_match_count < current_match_count:
         return False
 
+    # 3. Priority declarada.
     candidate_priority = rule_priority_score(candidate_rule)
     current_priority = rule_priority_score(current_rule)
 
@@ -49,10 +67,32 @@ def compare_rules(
     if candidate_priority < current_priority:
         return False
 
+    # 4. Último desempate: especificidad global de la regla.
     candidate_specificity = specificity_score(candidate_rule)
     current_specificity = specificity_score(current_rule)
 
-    if candidate_specificity > current_specificity:
-        return True
+    return candidate_specificity > current_specificity
 
-    return False
+def matched_specificity_score(
+    matched_patterns: list[str] | None,
+) -> tuple[int, int]:
+    """
+    Prioriza el patrón que realmente hizo match.
+
+    Ej:
+      "gráfica de precio" -> (3 palabras, 17 chars)
+      "precio de"         -> (2 palabras, 9 chars)
+      "precio"            -> (1 palabra, 6 chars)
+    """
+    if not matched_patterns:
+        return (0, 0)
+
+    longest = max(
+        matched_patterns,
+        key=lambda p: (len(p.split()), len(p)),
+    )
+
+    return (
+        len(longest.split()),
+        len(longest),
+    )    

@@ -9,6 +9,10 @@ ENVELOPE_KEYS = {"ok", "fiat", "ts", "source", "provider", "summary"}
 def normalize_data(raw: dict, kind: str | None = None) -> dict:
     if kind == "prices":
         return _normalize_prices(raw)
+
+    if kind == "price_spark":
+        return _normalize_price_spark(raw)    
+        
     """Reubica la carga cruda a forma uniforme. No inspecciona contenido."""
     if not isinstance(raw, dict):
         return {"rows": []}
@@ -76,3 +80,48 @@ def _normalize_prices(resp: dict) -> dict:
         rows.append(row)
 
     return {"rows": rows}
+
+def _normalize_price_spark(resp: dict) -> dict:
+    series = resp.get("series") or {}
+
+    rows = []
+
+    if not isinstance(series, dict):
+        return {"rows": rows}
+
+    for symbol, raw_points in series.items():
+        if not isinstance(raw_points, list):
+            continue
+
+        points = []
+
+        for point in raw_points:
+            if not isinstance(point, dict):
+                continue
+
+            ts = point.get("t")
+            value = point.get("v")
+
+            if value is None:
+                continue
+
+            try:
+                numeric_value = float(value)
+            except (TypeError, ValueError):
+                continue
+
+            points.append({
+                "t": str(ts) if ts is not None else None,
+                "v": numeric_value,
+            })
+
+        if len(points) < 2:
+            continue
+
+        rows.append({
+            "symbol": str(symbol).upper(),
+            "last": points[-1]["v"],
+            "points": points,
+        })
+
+    return {"rows": rows}    

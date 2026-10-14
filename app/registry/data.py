@@ -411,6 +411,35 @@ REGISTRY = RegistryDef(
             allow_composition=False,
         ),
 
+        # --- sparklines (prices sparks) ---
+        IntentRule(
+            rule_id="rule_price_spark_crypto",
+            intent_family="price_spark_exec",
+            description="Routes recent price series and sparkline requests to CryptoLink price spark execution.",
+            priority="critical",
+            patterns=[
+                "spark",
+                "sparkline",
+                "price spark",
+                "price sparkline",
+                "grafica de precio",
+                "gráfica de precio",
+                "grafica del precio",
+                "gráfica del precio",
+                "serie de precio",
+                "serie del precio",
+                "price chart",
+                "recent price chart",
+                "historico reciente",
+                "histórico reciente",
+                "movimiento reciente del precio",
+                "recent price movement",
+            ],
+            preferred_modules=["cryptolink"],
+            preferred_capabilities=["crypto.exec.price_spark"],
+            allow_composition=False,
+        ),
+
         # --- Trends (tendencia) ---
         IntentRule(
             rule_id="rule_what_is_social_link",

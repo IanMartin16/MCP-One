@@ -59,8 +59,10 @@ def detect_intent_family(user_input: str) -> MatchResult:
         if compare_rules(
             candidate_rule=rule,
             candidate_match_count=current_score,
+            candidate_matches=current_matches,
             current_rule=best_rule,
             current_match_count=best_score,
+            current_matches=best_matches,
         ):
             best_rule = rule
             best_matches = current_matches
